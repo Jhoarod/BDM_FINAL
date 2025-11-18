@@ -1,0 +1,49 @@
+services:
+
+  postgres:
+    image: postgis/postgis:17-3.5
+    container_name: parqueo-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: parqueo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data/01-estructura.sql:/docker-entrypoint-initdb.d/01-estructura.sql
+      - ./data/02-insercion.sql:/docker-entrypoint-initdb.d/02-insercion.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d parqueo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+  api:
+    build: ./backend
+    container_name: parqueo-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://admin:admin123@postgres:5432/parqueo
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+
+volumes:
+  postgres_data:

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mapa de Zonas de Parqueo</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2h1w6gQkQ2jvUeQ0D0Gqj2u1mQ5S4r2RZ6b4p2M=" crossorigin=""/>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <h1>Parqueos · Mapa y Zonas</h1>
+    </header>
+
+    <main class="container">
+      <section id="map" class="map"></section>
+
+      <aside class="cards" id="cards"></aside>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <button id="closeModal" class="close-btn">&times;</button>
+        <div id="modalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1jGgD6t3q1C0wK1YQH9bE0A1/9gk3rW2q8y4z0r0=" crossorigin=""></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
