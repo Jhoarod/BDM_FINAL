@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from database import engine
-import models
+from routers import zonas
 
 app = FastAPI()
 
+app.include_router(zonas.router, prefix="/api")
+
 @app.get("/")
 def root():
-    return {"message": "API funcionando"}
+    return {"msg": "API Parqueo funcionando"}

@@ -1,6 +1,7 @@
 // script.js
 // Consume /api/zonas (espera un array de objetos). Si falla, usa fallback.
-const API_URL = '/api/zonas';
+const API_URL = 'http://localhost:8000/api/zonas';
+
 
 // Fallback con 5 zonas (lat, lon reales de ejemplo)
 const FALLBACK_ZONAS = [
