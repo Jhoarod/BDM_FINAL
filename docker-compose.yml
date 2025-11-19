@@ -45,5 +45,14 @@ services:
     volumes:
       - ./backend:/app
 
+
+
+  frontend:
+    build: ./frontend
+    container_name: parqueo-front
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
 volumes:
   postgres_data:
