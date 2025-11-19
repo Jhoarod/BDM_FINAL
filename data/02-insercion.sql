@@ -29,12 +29,14 @@ INSERT INTO vehiculo (id_usuario, placa, tipo, color) VALUES
 ---------------------------------------------------------
 -- ZONAS DE PARQUEO (5)
 ---------------------------------------------------------
-INSERT INTO zona_parqueo (nombre_zona, descripcion, direccion, capacidad, horario_apertura, horario_cierre) VALUES
-('Zona Norte', 'Parqueadero cubierto en el sector norte', 'Calle 120 # 15-30', 50, '06:00', '22:00'),
-('Zona Centro', 'Parqueadero principal en el centro', 'Cra 10 # 20-15', 40, '06:00', '23:00'),
-('Zona Sur', 'Parqueadero al aire libre', 'Av Boyacá # 45-22', 30, '07:00', '21:00'),
-('Zona VIP', 'Parqueadero privado premium', 'Calle 95 # 14-11', 20, '06:00', '23:59'),
-('Zona Económica', 'Parqueadero económico y amplio', 'Cra 50 # 80-12', 60, '08:00', '20:00');
+INSERT INTO zona_parqueo (nombre_zona, descripcion, direccion, capacidad, horario_apertura, horario_cierre, lat, lon)
+VALUES
+('Zona Norte', 'Parqueadero cubierto', 'Calle 120 # 15-30', 50, '06:00', '22:00', 4.701594, -74.055558),
+('Zona Centro', 'Parqueadero principal', 'Cra 10 # 20-15', 40, '06:00', '23:00', 4.609710, -74.081754),
+('Zona Sur', 'Parqueadero al aire libre', 'Av Boyacá # 45-22', 30, '07:00', '21:00', 4.598056, -74.120000),
+('Zona VIP', 'Parqueadero premium', 'Calle 95 # 14-11', 20, '06:00', '23:59', 4.677000, -74.058000),
+('Zona Económica', 'Amplio y económico', 'Cra 50 # 80-12', 60, '08:00', '20:00', 4.650000, -74.100000);
+
 
 ---------------------------------------------------------
 -- ESPACIOS DE PARQUEO (8 por zona = 40 espacios)

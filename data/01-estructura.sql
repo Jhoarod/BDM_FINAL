@@ -29,7 +29,9 @@ CREATE TABLE zona_parqueo (
     direccion VARCHAR(200),
     capacidad INT,
     horario_apertura TIME,
-    horario_cierre TIME
+    horario_cierre TIME,
+    lat DECIMAL(10,6),
+    lon DECIMAL(10,6)   
 );
 
 -- Espacios de parqueo
