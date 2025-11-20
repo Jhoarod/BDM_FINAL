@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mapa de Zonas de Parqueo</title>
 
- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -22,19 +22,62 @@
       <aside class="cards" id="cards"></aside>
     </main>
 
-    <!-- Modal -->
+    <!-- Modal original para ver detalles de zonas -->
     <div id="modal" class="modal hidden">
       <div class="modal-content">
         <button id="closeModal" class="close-btn">&times;</button>
         <div id="modalBody"></div>
       </div>
     </div>
+
+    <!-- NUEVO: Modal para AGREGAR nueva zona -->
+    <div id="modalAgregar" class="modal-agregar hidden">
+      <div class="modal-agregar-content">
+        <button id="closeModalAgregar" class="close-agregar">&times;</button>
+        <h2 class="modal-agregar-title">Agregar Nueva Zona</h2>
+        
+        <div class="form-container">
+          <div class="input-group">
+            <label>Nombre de la Zona</label>
+            <input id="inNombre" type="text" placeholder="Ej: Zona Premium" />
+          </div>
+
+          <div class="input-group">
+            <label>Dirección</label>
+            <input id="inDireccion" type="text" placeholder="Ej: Calle 123 # 45-67" />
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label>Latitud</label>
+              <input id="inLat" type="number" step="any" placeholder="4.6097" />
+            </div>
+
+            <div class="input-group">
+              <label>Longitud</label>
+              <input id="inLon" type="number" step="any" placeholder="-74.0818" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Capacidad Total</label>
+            <input id="inCapacidad" type="number" placeholder="50" />
+          </div>
+
+          <button id="btnGuardarZona" class="btn-guardar-zona">
+            <span class="save-icon"></span>
+            Guardar Zona
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUEVO: Botón flotante inferior derecha -->
+    <button id="btnFloatAgregar" class="btn-float">
+      <span class="plus-icon">+</span>
+      Nueva Zona
+    </button>
   </div>
-
-  <!-- Leaflet JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 
   <script src="script.js"></script>
 </body>

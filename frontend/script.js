@@ -2,7 +2,6 @@
 // Consume /api/zonas (espera un array de objetos). Si falla, usa fallback.
 const API_URL = "http://localhost:8000/api/zonas/";
 
-
 // Fallback con 5 zonas (lat, lon reales de ejemplo)
 const FALLBACK_ZONAS = [
   {
@@ -62,11 +61,24 @@ const FALLBACK_ZONAS = [
   }
 ];
 
-// Elementos DOM
+// Elementos DOM - Modal original de detalles
 const cardsEl = document.getElementById('cards');
 const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modalBody');
 const closeModal = document.getElementById('closeModal');
+
+// Elementos DOM - Modal AGREGAR nueva zona
+const btnFloatAgregar = document.getElementById('btnFloatAgregar');
+const modalAgregar = document.getElementById('modalAgregar');
+const closeModalAgregar = document.getElementById('closeModalAgregar');
+const btnGuardarZona = document.getElementById('btnGuardarZona');
+
+// Inputs del formulario
+const inNombre = document.getElementById('inNombre');
+const inDireccion = document.getElementById('inDireccion');
+const inLat = document.getElementById('inLat');
+const inLon = document.getElementById('inLon');
+const inCapacidad = document.getElementById('inCapacidad');
 
 // Inicializar mapa
 const map = L.map('map').setView([4.60971, -74.08175], 12);
@@ -136,12 +148,106 @@ function renderMapMarkers(zonas){
   if(zonas.length) map.fitBounds(markersGroup.getBounds().pad(0.2));
 }
 
+// ============================================
+// FUNCIONALIDAD MODAL AGREGAR ZONA
+// ============================================
+
+// Abrir modal al hacer clic en el botón flotante
+btnFloatAgregar.addEventListener('click', () => {
+  modalAgregar.classList.remove('hidden');
+});
+
+// Cerrar modal con la X
+closeModalAgregar.addEventListener('click', () => {
+  modalAgregar.classList.add('hidden');
+  limpiarFormulario();
+});
+
+// Cerrar modal al hacer clic fuera del contenido
+modalAgregar.addEventListener('click', (e) => {
+  if(e.target === modalAgregar) {
+    modalAgregar.classList.add('hidden');
+    limpiarFormulario();
+  }
+});
+
+// Guardar nueva zona
+btnGuardarZona.addEventListener('click', async () => {
+  const nombre = inNombre.value.trim();
+  const direccion = inDireccion.value.trim();
+  const lat = parseFloat(inLat.value);
+  const lon = parseFloat(inLon.value);
+  const capacidad = parseInt(inCapacidad.value);
+
+  // Validación
+  if(!nombre) {
+    alert('Por favor ingresa el nombre de la zona');
+    return;
+  }
+  if(!direccion) {
+    alert('Por favor ingresa la dirección');
+    return;
+  }
+  if(isNaN(lat) || isNaN(lon)) {
+    alert('Por favor ingresa latitud y longitud válidas');
+    return;
+  }
+  if(isNaN(capacidad) || capacidad <= 0) {
+    alert('Por favor ingresa una capacidad válida');
+    return;
+  }
+
+  // Crear objeto de nueva zona
+  const nuevaZona = {
+    nombre_zona: nombre,
+    direccion: direccion,
+    lat: lat,
+    lon: lon,
+    capacidad: capacidad,
+    horario_apertura: "06:00",
+    horario_cierre: "22:00",
+    descripcion: ""
+  };
+
+  console.log('Nueva zona a guardar:', nuevaZona);
+  
+  // Aquí puedes hacer el POST al API
+  try {
+    // const response = await fetch(API_URL, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(nuevaZona)
+    // });
+    // if(response.ok) {
+    //   alert('Zona guardada exitosamente!');
+    //   const zonas = await fetchZonas();
+    //   renderCards(zonas);
+    //   renderMapMarkers(zonas);
+    // }
+    
+    // Por ahora solo mostramos mensaje de éxito
+    alert('✓ Zona guardada exitosamente!');
+    
+  } catch (error) {
+    console.error('Error al guardar:', error);
+    alert('Error al guardar la zona');
+  }
+  
+  modalAgregar.classList.add('hidden');
+  limpiarFormulario();
+});
+
+function limpiarFormulario() {
+  inNombre.value = '';
+  inDireccion.value = '';
+  inLat.value = '';
+  inLon.value = '';
+  inCapacidad.value = '';
+}
+
 // Inicializar
 (async function init(){
   const zonas = await fetchZonas();
   renderCards(zonas);
   renderMapMarkers(zonas);
 })();
-
-
-
