@@ -180,7 +180,7 @@ body{margin:0;background:var(--bg);color:#111}
     font-weight: 700;
     font-size: 17px;
     cursor: pointer;
-    box-shadow: 0 8px 25px rgba(17, 153, 142, 0.4);
+    box-shadow: 0 8px 25px rgba(20, 186, 83, 0.4);
 }
 
 .btn-guardar-zona:hover {
