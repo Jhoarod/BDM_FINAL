@@ -173,7 +173,7 @@ body{margin:0;background:var(--bg);color:#111}
 .btn-guardar-zona {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: linear-gradient(135deg, #30df44 0%, #41b248 100%);
     border: none;
     border-radius: 14px;
     color: white;
