@@ -63,8 +63,8 @@ def generar_datos_parqueo(**context):
     with open('/shared/datos_parqueo.json', 'w') as f:
         json.dump(datos, f, indent=2)
     
-    print(f"✅ Datos generados: {len(datos)} zonas")
-    print(f"📊 Ejemplo: {datos[0]}")
+    print(f" Datos generados: {len(datos)} zonas")
+    print(f" Ejemplo: {datos[0]}")
     
     cur.close()
     conn.close()
@@ -87,7 +87,7 @@ def preparar_para_spark(**context):
     with open('/shared/datos_procesados.json', 'w') as f:
         json.dump(datos, f, indent=2)
     
-    print(f"✅ Datos preparados para Spark")
+    print(f"Datos preparados para Spark")
     return True
 
 # Tareas

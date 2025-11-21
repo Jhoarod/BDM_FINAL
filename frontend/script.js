@@ -1,4 +1,4 @@
-// script.js - v7 con ML y recomendaciones
+// script.js
 const API_URL = "http://localhost:8000/api/zonas/";
 
 let userLocation = null;
@@ -82,7 +82,7 @@ function openModal(z){
       <div class="detail-row"><strong>Coordenadas</strong><span>${z.lat}, ${z.lon}</span></div>
     </div>
     <button class="btn-como-llegar" onclick="mostrarRuta(${z.lat}, ${z.lon}, '${z.nombre_zona}')">
-      🗺️ Cómo llegar
+       Cómo llegar
     </button>
   `;
   modal.classList.remove('hidden');
@@ -121,9 +121,7 @@ function renderMapMarkers(zonas){
   }
 }
 
-// ============================================
-// FUNCIONES DE RECOMENDACIONES ML
-// ============================================
+
 
 async function obtenerRecomendaciones() {
   if (!userLocation) {
@@ -160,10 +158,10 @@ function mostrarRecomendaciones(recomendaciones) {
   routeLines.forEach(line => map.removeLayer(line));
   routeLines = [];
 
-  let html = '<h2>🎯 Mejores Zonas Recomendadas</h2><div class="recomendaciones-list">';
+  let html = '<h2> Mejores Zonas Recomendadas</h2><div class="recomendaciones-list">';
   
   recomendaciones.forEach((rec, index) => {
-    const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+    const medal = index === 0 ? '' : index === 1 ? '' : '';
     html += `
       <div class="recomendacion-item">
         <div class="rec-header">
@@ -171,9 +169,9 @@ function mostrarRecomendaciones(recomendaciones) {
           <strong>${rec.nombre_zona}</strong>
         </div>
         <div class="rec-details">
-          <span>📍 ${rec.distancia_km} km</span>
-          <span>⏱️ ~${rec.tiempo_estimado_min} min</span>
-          <span>📊 Score: ${rec.score}</span>
+          <span> ${rec.distancia_km} km</span>
+          <span> ~${rec.tiempo_estimado_min} min</span>
+          <span> Score: ${rec.score}</span>
         </div>
         <button class="btn-ruta-rec" onclick="dibujarRuta(${rec.lat}, ${rec.lon}, '${rec.nombre_zona}')">
           Ver Ruta
@@ -215,9 +213,6 @@ function dibujarRuta(destLat, destLon, nombre) {
 
 window.mostrarRuta = dibujarRuta;
 
-// ============================================
-// MODAL AGREGAR ZONA
-// ============================================
 
 btnFloatAgregar.addEventListener('click', () => {
   modalAgregar.classList.remove('hidden');
@@ -299,9 +294,6 @@ function limpiarFormulario() {
   inHorarioCierre.value = '22:00';
 }
 
-// ============================================
-// GEOLOCALIZACIÓN
-// ============================================
 
 function getUserLocation() {
   if (navigator.geolocation) {
@@ -335,9 +327,6 @@ function getUserLocation() {
   }
 }
 
-// ============================================
-// INICIALIZAR
-// ============================================
 
 (async function init(){
   console.log('Inicializando aplicación...');

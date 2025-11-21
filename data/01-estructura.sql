@@ -73,7 +73,7 @@ CREATE TABLE registro_parqueo (
     FOREIGN KEY (id_espacio) REFERENCES espacio_parqueo(id_espacio)
 );
 
--- Historial de estado (opcional pero útil)
+-- Historial de estado 
 CREATE TABLE historial_estado_espacio (
     id_historial SERIAL PRIMARY KEY,
     id_espacio INT NOT NULL,

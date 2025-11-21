@@ -106,7 +106,7 @@ def recomendar_zonas(user_lat, user_lon, top_n=3):
     with open('/shared/recomendaciones.json', 'w') as f:
         json.dump(output, f, indent=2)
     
-    print(f"✅ Modelo ejecutado: {len(resultado)} recomendaciones generadas")
+    print(f" Modelo ejecutado: {len(resultado)} recomendaciones generadas")
     return resultado
 
 if __name__ == "__main__":

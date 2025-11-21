@@ -1,6 +1,4 @@
----------------------------------------------------------
--- USUARIOS
----------------------------------------------------------
+
 INSERT INTO usuario (nombre, apellido, dni, telefono, email) VALUES
 ('Carlos', 'Ramírez', '1001234567', '3001112222', 'carlos@example.com'),
 ('María', 'Gómez', '1009876543', '3012223333', 'maria@example.com'),
@@ -13,9 +11,7 @@ INSERT INTO usuario (nombre, apellido, dni, telefono, email) VALUES
 ('Andrés', 'Mora', '1052233445', '3089991111', 'andres@example.com'),
 ('Diana', 'Peralta', '1056677889', '3091112222', 'diana@example.com');
 
----------------------------------------------------------
--- VEHÍCULOS
----------------------------------------------------------
+
 INSERT INTO vehiculo (id_usuario, placa, tipo, color) VALUES
 (1, 'ABC123', 'Carro', 'Rojo'),
 (1, 'XYZ987', 'Moto', 'Negro'),
@@ -26,9 +22,7 @@ INSERT INTO vehiculo (id_usuario, placa, tipo, color) VALUES
 (6, 'FGH678', 'Camioneta', 'Negro'),
 (7, 'GHI789', 'Moto', 'Rojo');
 
----------------------------------------------------------
--- ZONAS DE PARQUEO (5)
----------------------------------------------------------
+
 INSERT INTO zona_parqueo (nombre_zona, descripcion, direccion, capacidad, horario_apertura, horario_cierre, lat, lon)
 VALUES
 ('Zona Norte', 'Parqueadero cubierto', 'Calle 120 # 15-30', 50, '06:00', '22:00', 4.701594, -74.055558),
@@ -38,9 +32,6 @@ VALUES
 ('Zona Económica', 'Amplio y económico', 'Cra 50 # 80-12', 60, '08:00', '20:00', 4.650000, -74.100000);
 
 
----------------------------------------------------------
--- ESPACIOS DE PARQUEO (8 por zona = 40 espacios)
----------------------------------------------------------
 
 -- Zona 1
 INSERT INTO espacio_parqueo (id_zona, numero_espacio, tipo_vehiculo) VALUES
@@ -67,9 +58,7 @@ INSERT INTO espacio_parqueo (id_zona, numero_espacio, tipo_vehiculo) VALUES
 (5,1,'Carro'),(5,2,'Carro'),(5,3,'Carro'),(5,4,'Carro'),
 (5,5,'Moto'),(5,6,'Moto'),(5,7,'Moto'),(5,8,'Carro');
 
----------------------------------------------------------
--- TARIFAS POR ZONA Y TIPO
----------------------------------------------------------
+
 INSERT INTO tarifa (id_zona, tipo_vehiculo, valor_minuto) VALUES
 (1, 'Carro', 120), (1, 'Moto', 80), (1, 'Camioneta', 150),
 (2, 'Carro', 100), (2, 'Moto', 70), (2, 'Camioneta', 130),
@@ -77,9 +66,7 @@ INSERT INTO tarifa (id_zona, tipo_vehiculo, valor_minuto) VALUES
 (4, 'Carro', 200), (4, 'Moto', 100), (4, 'Camioneta', 250),
 (5, 'Carro', 70),  (5, 'Moto', 50);
 
----------------------------------------------------------
--- REGISTROS DE PARQUEO (Simulados)
----------------------------------------------------------
+
 INSERT INTO registro_parqueo (id_usuario, id_vehiculo, id_espacio, fecha_ingreso, estado) VALUES
 (1, 1, 1, NOW() - INTERVAL '2 hours', 'ACTIVO'),
 (2, 3, 10, NOW() - INTERVAL '1 hour', 'ACTIVO'),
@@ -87,9 +74,7 @@ INSERT INTO registro_parqueo (id_usuario, id_vehiculo, id_espacio, fecha_ingreso
 (4, 5, 25, NOW() - INTERVAL '3 hours', 'ACTIVO'),
 (5, 6, 30, NOW() - INTERVAL '20 minutes', 'ACTIVO');
 
----------------------------------------------------------
--- HISTORIAL DE CAMBIOS DE ESTADO
----------------------------------------------------------
+
 INSERT INTO historial_estado_espacio (id_espacio, estado_anterior, estado_nuevo) VALUES
 (1, 'LIBRE', 'OCUPADO'),
 (10, 'LIBRE', 'OCUPADO'),

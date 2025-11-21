@@ -63,9 +63,6 @@ def create_zona(zona: ZonaCreate, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error al crear zona: {str(e)}")
 
-# ============================================
-# NUEVA RUTA: RECOMENDACIONES CON ML
-# ============================================
 
 class UbicacionUsuario(BaseModel):
     lat: float
@@ -83,7 +80,7 @@ def recomendar_zonas(ubicacion: UbicacionUsuario):
         
         # Si el script no existe o falla, usar modelo simple local
         if result.returncode != 0:
-            print("⚠️ Spark no disponible, usando modelo local")
+            print("Spark no disponible, usando modelo local")
             return _modelo_local(ubicacion.lat, ubicacion.lon, ubicacion.top_n)
         
         # Leer resultado de Spark
