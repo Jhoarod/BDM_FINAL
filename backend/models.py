@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Time, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Time, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -12,4 +12,5 @@ class Zona(Base):
     capacidad = Column(Integer)
     horario_apertura = Column(Time)
     horario_cierre = Column(Time)
-
+    lat = Column(Float, nullable=False) 
+    lon = Column(Float, nullable=False)

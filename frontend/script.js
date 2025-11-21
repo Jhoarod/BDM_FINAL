@@ -1,8 +1,6 @@
 // script.js
-// Consume /api/zonas (espera un array de objetos). Si falla, usa fallback.
 const API_URL = "http://localhost:8000/api/zonas/";
 
-// Fallback con 5 zonas (lat, lon reales de ejemplo)
 const FALLBACK_ZONAS = [
   {
     id_zona: 1,
@@ -75,10 +73,13 @@ const btnGuardarZona = document.getElementById('btnGuardarZona');
 
 // Inputs del formulario
 const inNombre = document.getElementById('inNombre');
+const inDescripcion = document.getElementById('inDescripcion');
 const inDireccion = document.getElementById('inDireccion');
 const inLat = document.getElementById('inLat');
 const inLon = document.getElementById('inLon');
 const inCapacidad = document.getElementById('inCapacidad');
+const inHorarioApertura = document.getElementById('inHorarioApertura');
+const inHorarioCierre = document.getElementById('inHorarioCierre');
 
 // Inicializar mapa
 const map = L.map('map').setView([4.60971, -74.08175], 12);
@@ -86,14 +87,15 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-let markersGroup = L.layerGroup().addTo(map);
+let markersGroup = L.featureGroup();
+markersGroup.addTo(map);
 
 async function fetchZonas(){
   try {
     const res = await fetch(API_URL);
     if(!res.ok) throw new Error('No hay respuesta del API');
     const zonas = await res.json();
-    if(!Array.isArray(zonas) || zonas.length === 0) throw new Error('Formato de datos inválido');
+    if(!Array.isArray(zonas) || zonas.length === 0) throw new Error('Formato inválido');
     return zonas;
   } catch (err) {
     console.warn('API no disponible, usando datos de ejemplo:', err.message);
@@ -120,50 +122,90 @@ function renderCards(zonas){
 }
 
 function openModal(z){
+  const descripcionHTML = z.descripcion ? `<p>${z.descripcion}</p>` : '';
+  
   modalBody.innerHTML = `
     <h2>${z.nombre_zona}</h2>
-    <p>${z.descripcion || ''}</p>
-    <div style="margin-top:10px">
-      <div class="detail-row"><strong>Dirección</strong><span>${z.direccion || '-'}</span></div>
-      <div class="detail-row"><strong>Capacidad</strong><span>${z.capacidad}</span></div>
-      <div class="detail-row"><strong>Horario</strong><span>${z.horario_apertura} - ${z.horario_cierre}</span></div>
-      <div class="detail-row"><strong>Coordenadas</strong><span>${z.lat}, ${z.lon}</span></div>
+    ${descripcionHTML}
+    <div class="modal-details">
+      <div class="detail-row">
+        <strong>Dirección</strong>
+        <span>${z.direccion || '-'}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Capacidad</strong>
+        <span>${z.capacidad}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Horario</strong>
+        <span>${z.horario_apertura} - ${z.horario_cierre}</span>
+      </div>
+      <div class="detail-row">
+        <strong>Coordenadas</strong>
+        <span>${z.lat}, ${z.lon}</span>
+      </div>
     </div>
   `;
   modal.classList.remove('hidden');
 }
 
 closeModal.addEventListener('click', () => modal.classList.add('hidden'));
-modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden') });
+modal.addEventListener('click', (e) => { 
+  if(e.target === modal) modal.classList.add('hidden') 
+});
 
 function renderMapMarkers(zonas){
   markersGroup.clearLayers();
+
   zonas.forEach(z => {
     if(typeof z.lat !== 'number' || typeof z.lon !== 'number') return;
+    
     const marker = L.marker([z.lat, z.lon]);
-    marker.bindPopup(`<strong>${z.nombre_zona}</strong><br>${z.direccion || ''}<br>Capacidad: ${z.capacidad}`);
-    marker.on('click', ()=> openModal(z));
+    
+    // Crear popup con botón "Ver Información"
+    const popupContent = `
+      <div class="popup-zona">
+        <strong class="popup-titulo">${z.nombre_zona}</strong>
+        <p class="popup-direccion">${z.direccion || ''}</p>
+        <p class="popup-capacidad">Capacidad: ${z.capacidad}</p>
+        <button class="btn-ver-info" data-zona-id="${z.id_zona}">Ver Información</button>
+      </div>
+    `;
+    
+    marker.bindPopup(popupContent);
+    
+    // Evento cuando se abre el popup
+    marker.on('popupopen', () => {
+      const btnVerInfo = document.querySelector('.btn-ver-info');
+      if(btnVerInfo) {
+        btnVerInfo.addEventListener('click', () => {
+          openModal(z);
+          map.closePopup();
+        });
+      }
+    });
+    
     markersGroup.addLayer(marker);
   });
-  if(zonas.length) map.fitBounds(markersGroup.getBounds().pad(0.2));
+
+  if (markersGroup.getLayers().length > 0) {
+    map.fitBounds(markersGroup.getBounds().pad(0.2));
+  }
 }
 
 // ============================================
-// FUNCIONALIDAD MODAL AGREGAR ZONA
+// MODAL AGREGAR ZONA
 // ============================================
 
-// Abrir modal al hacer clic en el botón flotante
 btnFloatAgregar.addEventListener('click', () => {
   modalAgregar.classList.remove('hidden');
 });
 
-// Cerrar modal con la X
 closeModalAgregar.addEventListener('click', () => {
   modalAgregar.classList.add('hidden');
   limpiarFormulario();
 });
 
-// Cerrar modal al hacer clic fuera del contenido
 modalAgregar.addEventListener('click', (e) => {
   if(e.target === modalAgregar) {
     modalAgregar.classList.add('hidden');
@@ -171,78 +213,75 @@ modalAgregar.addEventListener('click', (e) => {
   }
 });
 
-// Guardar nueva zona
 btnGuardarZona.addEventListener('click', async () => {
   const nombre = inNombre.value.trim();
+  const descripcion = inDescripcion.value.trim();
   const direccion = inDireccion.value.trim();
   const lat = parseFloat(inLat.value);
   const lon = parseFloat(inLon.value);
   const capacidad = parseInt(inCapacidad.value);
+  const horarioApertura = inHorarioApertura.value;
+  const horarioCierre = inHorarioCierre.value;
 
   // Validación
-  if(!nombre) {
-    alert('Por favor ingresa el nombre de la zona');
-    return;
-  }
-  if(!direccion) {
-    alert('Por favor ingresa la dirección');
-    return;
-  }
-  if(isNaN(lat) || isNaN(lon)) {
-    alert('Por favor ingresa latitud y longitud válidas');
-    return;
-  }
-  if(isNaN(capacidad) || capacidad <= 0) {
-    alert('Por favor ingresa una capacidad válida');
-    return;
-  }
+  if(!nombre) return alert('Por favor ingresa el nombre');
+  if(!direccion) return alert('Por favor ingresa la dirección');
+  if(isNaN(lat) || isNaN(lon)) return alert('Coordenadas inválidas');
+  if(isNaN(capacidad) || capacidad <= 0) return alert('Capacidad inválida');
+  if(!horarioApertura) return alert('Por favor ingresa el horario de apertura');
+  if(!horarioCierre) return alert('Por favor ingresa el horario de cierre');
 
-  // Crear objeto de nueva zona
   const nuevaZona = {
     nombre_zona: nombre,
+    descripcion: descripcion,
     direccion: direccion,
     lat: lat,
     lon: lon,
     capacidad: capacidad,
-    horario_apertura: "06:00",
-    horario_cierre: "22:00",
-    descripcion: ""
+    horario_apertura: horarioApertura,
+    horario_cierre: horarioCierre
   };
 
   console.log('Nueva zona a guardar:', nuevaZona);
-  
+
   // Aquí puedes hacer el POST al API
   try {
+    // Descomentar cuando tengas el endpoint listo:
     // const response = await fetch(API_URL, {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(nuevaZona)
     // });
-    // if(response.ok) {
-    //   alert('Zona guardada exitosamente!');
+    // 
+    // if (response.ok) {
+    //   alert('✓ Zona guardada exitosamente!');
     //   const zonas = await fetchZonas();
     //   renderCards(zonas);
     //   renderMapMarkers(zonas);
+    // } else {
+    //   alert('Error al guardar la zona en el servidor');
     // }
-    
-    // Por ahora solo mostramos mensaje de éxito
-    alert('✓ Zona guardada exitosamente!');
-    
+
+    alert('Zona guardada exitosamente!');
+
   } catch (error) {
     console.error('Error al guardar:', error);
     alert('Error al guardar la zona');
   }
-  
+
   modalAgregar.classList.add('hidden');
   limpiarFormulario();
 });
 
 function limpiarFormulario() {
   inNombre.value = '';
+  inDescripcion.value = '';
   inDireccion.value = '';
   inLat.value = '';
   inLon.value = '';
   inCapacidad.value = '';
+  inHorarioApertura.value = '06:00';
+  inHorarioCierre.value = '22:00';
 }
 
 // Inicializar

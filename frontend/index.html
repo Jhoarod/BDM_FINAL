@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <!-- NUEVO: Modal para AGREGAR nueva zona -->
+    <!-- Modal para AGREGAR nueva zona -->
     <div id="modalAgregar" class="modal-agregar hidden">
       <div class="modal-agregar-content">
         <button id="closeModalAgregar" class="close-agregar">&times;</button>
@@ -40,6 +40,11 @@
           <div class="input-group">
             <label>Nombre de la Zona</label>
             <input id="inNombre" type="text" placeholder="Ej: Zona Premium" />
+          </div>
+
+          <div class="input-group">
+            <label>Descripción</label>
+            <input id="inDescripcion" type="text" placeholder="Ej: Parqueadero cubierto" />
           </div>
 
           <div class="input-group">
@@ -64,6 +69,18 @@
             <input id="inCapacidad" type="number" placeholder="50" />
           </div>
 
+          <div class="input-row">
+            <div class="input-group">
+              <label>Horario Apertura</label>
+              <input id="inHorarioApertura" type="time" value="06:00" />
+            </div>
+
+            <div class="input-group">
+              <label>Horario Cierre</label>
+              <input id="inHorarioCierre" type="time" value="22:00" />
+            </div>
+          </div>
+
           <button id="btnGuardarZona" class="btn-guardar-zona">
             <span class="save-icon"></span>
             Guardar Zona
@@ -72,7 +89,7 @@
       </div>
     </div>
 
-    <!-- NUEVO: Botón flotante inferior derecha -->
+    <!-- Botón flotante inferior derecha -->
     <button id="btnFloatAgregar" class="btn-float">
       <span class="plus-icon">+</span>
       Nueva Zona
