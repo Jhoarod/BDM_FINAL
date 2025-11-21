@@ -1,63 +1,5 @@
-// script.js
+// script.js - v6 con API real
 const API_URL = "http://localhost:8000/api/zonas/";
-
-const FALLBACK_ZONAS = [
-  {
-    id_zona: 1,
-    nombre_zona: "Zona Norte",
-    descripcion: "Parqueadero cubierto en el sector norte",
-    direccion: "Calle 120 # 15-30",
-    capacidad: 50,
-    horario_apertura: "06:00",
-    horario_cierre: "22:00",
-    lat: 4.701594,
-    lon: -74.055558
-  },
-  {
-    id_zona: 2,
-    nombre_zona: "Zona Centro",
-    descripcion: "Parqueadero principal en el centro",
-    direccion: "Cra 10 # 20-15",
-    capacidad: 40,
-    horario_apertura: "06:00",
-    horario_cierre: "23:00",
-    lat: 4.609710,
-    lon: -74.081754
-  },
-  {
-    id_zona: 3,
-    nombre_zona: "Zona Sur",
-    descripcion: "Parqueadero al aire libre",
-    direccion: "Av Boyacá # 45-22",
-    capacidad: 30,
-    horario_apertura: "07:00",
-    horario_cierre: "21:00",
-    lat: 4.598056,
-    lon: -74.120000
-  },
-  {
-    id_zona: 4,
-    nombre_zona: "Zona VIP",
-    descripcion: "Parqueadero privado premium",
-    direccion: "Calle 95 # 14-11",
-    capacidad: 20,
-    horario_apertura: "06:00",
-    horario_cierre: "23:59",
-    lat: 4.677000,
-    lon: -74.058000
-  },
-  {
-    id_zona: 5,
-    nombre_zona: "Zona Económica",
-    descripcion: "Parqueadero económico y amplio",
-    direccion: "Cra 50 # 80-12",
-    capacidad: 60,
-    horario_apertura: "08:00",
-    horario_cierre: "20:00",
-    lat: 4.650000,
-    lon: -74.100000
-  }
-];
 
 // Elementos DOM - Modal original de detalles
 const cardsEl = document.getElementById('cards');
@@ -90,21 +32,34 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let markersGroup = L.featureGroup();
 markersGroup.addTo(map);
 
+// Fetch zonas desde la API
 async function fetchZonas(){
   try {
     const res = await fetch(API_URL);
-    if(!res.ok) throw new Error('No hay respuesta del API');
+    if(!res.ok) throw new Error('Error al obtener zonas de la API');
     const zonas = await res.json();
-    if(!Array.isArray(zonas) || zonas.length === 0) throw new Error('Formato inválido');
+    
+    if(!Array.isArray(zonas)) throw new Error('Formato de respuesta inválido');
+    
+    console.log('Zonas obtenidas de la BD:', zonas);
     return zonas;
+    
   } catch (err) {
-    console.warn('API no disponible, usando datos de ejemplo:', err.message);
-    return FALLBACK_ZONAS;
+    console.error('Error al conectar con la API:', err.message);
+    alert('Error al cargar las zonas. Verifica que el servidor esté ejecutándose.');
+    return [];
   }
 }
 
+// Renderizar tarjetas laterales
 function renderCards(zonas){
   cardsEl.innerHTML = '';
+  
+  if(zonas.length === 0) {
+    cardsEl.innerHTML = '<p style="padding:20px;text-align:center;color:#666;">No hay zonas registradas</p>';
+    return;
+  }
+  
   zonas.forEach(z => {
     const card = document.createElement('div');
     card.className = 'card';
@@ -121,6 +76,7 @@ function renderCards(zonas){
   });
 }
 
+// Abrir modal de detalles
 function openModal(z){
   const descripcionHTML = z.descripcion ? `<p>${z.descripcion}</p>` : '';
   
@@ -154,6 +110,7 @@ modal.addEventListener('click', (e) => {
   if(e.target === modal) modal.classList.add('hidden') 
 });
 
+// Renderizar marcadores en el mapa
 function renderMapMarkers(zonas){
   markersGroup.clearLayers();
 
@@ -213,6 +170,7 @@ modalAgregar.addEventListener('click', (e) => {
   }
 });
 
+// Guardar zona en la BD mediante API
 btnGuardarZona.addEventListener('click', async () => {
   const nombre = inNombre.value.trim();
   const descripcion = inDescripcion.value.trim();
@@ -242,35 +200,48 @@ btnGuardarZona.addEventListener('click', async () => {
     horario_cierre: horarioCierre
   };
 
-  console.log('Nueva zona a guardar:', nuevaZona);
+  console.log('Enviando zona a la API:', nuevaZona);
 
-  // Aquí puedes hacer el POST al API
+  // Deshabilitar botón mientras se guarda
+  btnGuardarZona.disabled = true;
+  btnGuardarZona.textContent = 'Guardando...';
+
   try {
-    // Descomentar cuando tengas el endpoint listo:
-    // const response = await fetch(API_URL, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(nuevaZona)
-    // });
-    // 
-    // if (response.ok) {
-    //   alert('✓ Zona guardada exitosamente!');
-    //   const zonas = await fetchZonas();
-    //   renderCards(zonas);
-    //   renderMapMarkers(zonas);
-    // } else {
-    //   alert('Error al guardar la zona en el servidor');
-    // }
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(nuevaZona)
+    });
 
-    alert('Zona guardada exitosamente!');
+    if (response.ok) {
+      const zonaCreada = await response.json();
+      console.log('Zona creada:', zonaCreada);
+      
+      alert('Zona guardada exitosamente en la base de datos!');
+      
+      // Recargar zonas y actualizar mapa
+      const zonas = await fetchZonas();
+      renderCards(zonas);
+      renderMapMarkers(zonas);
+      
+      modalAgregar.classList.add('hidden');
+      limpiarFormulario();
+    } else {
+      const errorData = await response.json();
+      console.error('Error del servidor:', errorData);
+      alert(`Error al guardar: ${errorData.detail || 'Error desconocido'}`);
+    }
 
   } catch (error) {
-    console.error('Error al guardar:', error);
-    alert('Error al guardar la zona');
+    console.error('Error al guardar zona:', error);
+    alert('Error de conexión. Verifica que el servidor esté ejecutándose.');
+  } finally {
+    // Reactivar botón
+    btnGuardarZona.disabled = false;
+    btnGuardarZona.innerHTML = '<span class="save-icon">✓</span> Guardar Zona';
   }
-
-  modalAgregar.classList.add('hidden');
-  limpiarFormulario();
 });
 
 function limpiarFormulario() {
@@ -284,9 +255,17 @@ function limpiarFormulario() {
   inHorarioCierre.value = '22:00';
 }
 
-// Inicializar
+// ============================================
+// INICIALIZAR AL CARGAR LA PÁGINA
+// ============================================
+
 (async function init(){
+  console.log('Inicializando aplicación...');
+  console.log('URL de la API:', API_URL);
+  
   const zonas = await fetchZonas();
   renderCards(zonas);
   renderMapMarkers(zonas);
+  
+  console.log('Aplicación inicializada correctamente');
 })();
