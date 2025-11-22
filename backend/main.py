@@ -7,7 +7,7 @@ app = FastAPI(title="API Parqueos", version="1.0")
 # CORS - Permitir peticiones del frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción especifica los dominios exactos
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -14,13 +14,13 @@ INSERT INTO usuario (nombre, apellido, dni, telefono, email) VALUES
 
 INSERT INTO vehiculo (id_usuario, placa, tipo, color) VALUES
 (1, 'ABC123', 'Carro', 'Rojo'),
-(1, 'XYZ987', 'Moto', 'Negro'),
+(1, 'XYZ98H', 'Moto', 'Negro'),
 (2, 'BCD234', 'Carro', 'Blanco'),
 (3, 'CDE345', 'Carro', 'Azul'),
-(4, 'DEF456', 'Moto', 'Verde'),
+(4, 'DEF45I', 'Moto', 'Verde'),
 (5, 'EFG567', 'Carro', 'Gris'),
 (6, 'FGH678', 'Camioneta', 'Negro'),
-(7, 'GHI789', 'Moto', 'Rojo');
+(7, 'GHI78L', 'Moto', 'Rojo');
 
 
 INSERT INTO zona_parqueo (nombre_zona, descripcion, direccion, capacidad, horario_apertura, horario_cierre, lat, lon)
