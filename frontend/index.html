@@ -12,10 +12,48 @@
 </head>
 <body>
   <div class="app">
-    <header class="topbar">
-      <h1>Parqueos · Mapa y Zonas</h1>
-    </header>
+   <header class="topbar">
+  <div class="topbar-left">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="url(#grad1)"/>
+          <circle cx="12" cy="9" r="3" fill="white"/>
+          <defs>
+            <linearGradient id="grad1" x1="5" y1="2" x2="19" y2="22">
+              <stop offset="0%" stop-color="#4285F4"/>
+              <stop offset="100%" stop-color="#34A853"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">ParkZone</span>
+        <span class="logo-subtitle">Smart Parking</span>
+      </div>
+    </div>
+  </div>
 
+  <div class="topbar-center">
+    <div class="search-box">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" placeholder="" id="searchInput" />
+    </div>
+  </div>
+
+  <div class="topbar-right">
+    <div class="status-indicator">
+      <span class="status-dot"></span>
+      <span class="status-text">En línea</span>
+    </div>
+    <div class="user-avatar" title="Mi cuenta">
+      <span>US</span>
+    </div>
+  </div>
+</header>
     <main class="container">
       <section id="map" class="map"></section>
 
