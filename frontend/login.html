@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - ParkZone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Logo -->
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="url(#grad1)"/>
+            <circle cx="12" cy="9" r="3" fill="white"/>
+            <defs>
+              <linearGradient id="grad1" x1="5" y1="2" x2="19" y2="22">
+                <stop offset="0%" stop-color="#4285F4"/>
+                <stop offset="100%" stop-color="#34A853"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">ParkZone</span>
+          <span class="logo-subtitle">Smart Parking</span>
+        </div>
+      </div>
+
+      <!-- Título dinámico -->
+      <h1 class="login-title" id="formTitle">Iniciar Sesión</h1>
+      <p class="login-subtitle" id="formSubtitle">Ingresa tus credenciales para continuar</p>
+
+      <!-- Mensaje de error/éxito -->
+      <div class="message hidden" id="message"></div>
+
+      <!-- Formulario -->
+      <form id="authForm">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input type="email" id="email" placeholder="tu@email.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input type="password" id="password" placeholder="••••••••" required minlength="6">
+            <button type="button" class="toggle-password" onclick="togglePassword()">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btnSubmit">
+          <span id="btnText">Iniciar Sesión</span>
+          <div class="spinner hidden" id="spinner"></div>
+        </button>
+      </form>
+
+      <!-- Toggle login/register -->
+      <div class="toggle-mode">
+        <span id="toggleText">¿Primera vez?</span>
+        <button type="button" class="btn-toggle" id="btnToggle" onclick="toggleMode()">Registrar contraseña</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <p class="footer-text">© 2025 ParkZone. Todos los derechos reservados.</p>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

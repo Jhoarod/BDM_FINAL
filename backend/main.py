@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.zonas import router as zonas_router
+from routers.auth import router as auth_router
 
 app = FastAPI(title="API Parqueos", version="1.0")
 
@@ -15,6 +16,7 @@ app.add_middleware(
 
 # Incluir rutas
 app.include_router(zonas_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
 
 @app.get("/")
 def root():

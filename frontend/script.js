@@ -1,4 +1,33 @@
 // script.js v4 - Con Routing OSRM Real
+function checkAuthentication() {
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  if (isLoggedIn !== 'true') {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+}
+
+function getCurrentUser() {
+  const userData = sessionStorage.getItem('user');
+  return userData ? JSON.parse(userData) : null;
+}
+
+function logout() {
+  sessionStorage.removeItem('user');
+  sessionStorage.removeItem('isLoggedIn');
+  window.location.href = 'login.html';
+}
+
+// Verificar autenticación al cargar
+if (!checkAuthentication()) {
+  throw new Error('No autenticado');
+}
+
+// Obtener usuario actual
+const currentUser = getCurrentUser();
+console.log('Usuario logueado:', currentUser);
+
 const API_URL = "http://localhost:8000/api/zonas/";
 
 let userLocation = null;

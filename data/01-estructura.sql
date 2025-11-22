@@ -7,6 +7,7 @@ CREATE TABLE usuario (
     dni VARCHAR(20) UNIQUE NOT NULL,
     telefono VARCHAR(20),
     email VARCHAR(150),
+    password VARCHAR(255),
     fecha_registro TIMESTAMP DEFAULT NOW()
 );
 
