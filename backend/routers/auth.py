@@ -1,7 +1,3 @@
-"""
-auth.py - Router de autenticación
-Crear en: backend/routers/auth.py
-"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
@@ -23,8 +19,6 @@ def get_db():
         db.close()
 
 
-# ============ SCHEMAS ============
-
 class LoginRequest(BaseModel):
     email: str
     password: str
@@ -33,6 +27,10 @@ class LoginRequest(BaseModel):
 class RegisterRequest(BaseModel):
     email: str
     password: str
+    nombre: str | None = None
+    apellido: str | None = None
+    dni: str | None = None
+    telefono: str | None = None
 
 
 class UserResponse(BaseModel):

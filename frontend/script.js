@@ -1,3 +1,74 @@
+
+function checkAuthentication() {
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+  if (isLoggedIn !== 'true') {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+}
+
+function getCurrentUser() {
+  const userData = sessionStorage.getItem('user');
+  return userData ? JSON.parse(userData) : null;
+}
+
+function logout() {
+  sessionStorage.removeItem('user');
+  sessionStorage.removeItem('isLoggedIn');
+  window.location.href = 'login.html';
+}
+
+// Verificar autenticación al cargar
+if (!checkAuthentication()) {
+  throw new Error('No autenticado');
+}
+
+
+
+// ============ MENÚ USUARIO ============
+function initUserMenu() {
+  const userMenuBtn = document.getElementById('userMenuBtn');
+  const userDropdown = document.getElementById('userDropdown');
+  const userInitials = document.getElementById('userInitials');
+  const userName = document.getElementById('userName');
+  const userEmail = document.getElementById('userEmail');
+
+  if (!currentUser) return;
+
+  // Establecer datos del usuario
+  const initials = currentUser.nombre 
+    ? currentUser.nombre.substring(0, 2).toUpperCase()
+    : 'US';
+  
+  userInitials.textContent = initials;
+  userName.textContent = currentUser.nombre || 'Usuario';
+  userEmail.textContent = currentUser.email || '';
+
+  // Toggle dropdown
+  userMenuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userDropdown.classList.toggle('hidden');
+  });
+
+  // Cerrar al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (!userMenuBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+      userDropdown.classList.add('hidden');
+    }
+  });
+}
+
+// Inicializar menú cuando el DOM esté listo
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initUserMenu);
+} else {
+  initUserMenu();
+}
+
+
+
+
 // script.js v4 - Con Routing OSRM Real
 function checkAuthentication() {
   const isLoggedIn = sessionStorage.getItem('isLoggedIn');
