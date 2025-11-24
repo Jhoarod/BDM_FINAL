@@ -13,7 +13,6 @@ import httpx
 
 router = APIRouter(prefix="/zonas", tags=["Zonas"])
 
-# ============ CONFIGURACIÓN ============
 SHARED_PATH = os.getenv("SHARED_PATH", "/shared")
 # OSRM: usar público por defecto, o tu instancia local
 OSRM_URL = os.getenv("OSRM_URL", "http://router.project-osrm.org")
@@ -45,7 +44,7 @@ class RutaRequest(BaseModel):
 
 
 def calcular_distancia_haversine(lat1, lon1, lat2, lon2):
-    """Calcular distancia en km usando fórmula Haversine"""
+
     R = 6371
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
@@ -57,7 +56,7 @@ def calcular_distancia_haversine(lat1, lon1, lat2, lon2):
 
 
 def cargar_datos_airflow():
-    """Cargar datos procesados por Airflow si existen y son recientes"""
+
     ruta_datos = os.path.join(SHARED_PATH, "datos_procesados.json")
     
     if not os.path.exists(ruta_datos):
@@ -100,7 +99,7 @@ def get_zonas(db: Session = Depends(get_db)):
 
 @router.post("/", response_model=ZonaSchema)
 def create_zona(zona: ZonaCreate, db: Session = Depends(get_db)):
-    """Crear una nueva zona de parqueo"""
+
     try:
         nueva_zona = Zona(
             nombre_zona=zona.nombre_zona,
@@ -124,10 +123,7 @@ def create_zona(zona: ZonaCreate, db: Session = Depends(get_db)):
 
 @router.post("/recomendar")
 def recomendar_zonas(ubicacion: UbicacionUsuario, db: Session = Depends(get_db)):
-    """
-    Obtener recomendaciones de zonas.
-    Usa datos de Airflow si están disponibles.
-    """
+
     # Intentar cargar datos de Airflow
     datos_airflow = cargar_datos_airflow()
     
@@ -200,10 +196,7 @@ def recomendar_zonas(ubicacion: UbicacionUsuario, db: Session = Depends(get_db))
 
 @router.post("/ruta")
 async def obtener_ruta(ruta: RutaRequest):
-    """
-    Obtener la ruta desde origen hasta destino usando OSRM.
-    Retorna geometría GeoJSON para dibujar en el mapa.
-    """
+
     try:
         # OSRM espera coordenadas como lon,lat (no lat,lon!)
         coords = f"{ruta.origen_lon},{ruta.origen_lat};{ruta.destino_lon},{ruta.destino_lat}"
@@ -256,10 +249,7 @@ async def obtener_ruta(ruta: RutaRequest):
 
 @router.post("/recomendar-con-ruta")
 async def recomendar_con_ruta(ubicacion: UbicacionUsuario, db: Session = Depends(get_db)):
-    """
-    Obtener recomendaciones de zonas CON las rutas calculadas.
-    Combina el modelo predictivo con routing real de OSRM.
-    """
+ 
     # Primero obtener recomendaciones
     recomendaciones_data = recomendar_zonas(ubicacion, db)
     recomendaciones = recomendaciones_data['recomendaciones']

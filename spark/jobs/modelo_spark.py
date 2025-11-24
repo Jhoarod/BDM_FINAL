@@ -29,7 +29,6 @@ SHARED_PATH = '/shared'
 
 
 def extraer_datos(**context):
-    """Extraer datos de PostgreSQL"""
     import psycopg2
     
     conn = psycopg2.connect(
@@ -79,7 +78,6 @@ def extraer_datos(**context):
 
 
 def verificar_spark(**context):
-    """Verificar si Spark está disponible"""
     import socket
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -94,7 +92,6 @@ def verificar_spark(**context):
 
 
 def modelo_fallback(**context):
-    """Modelo Python si Spark no está disponible"""
     with open(f'{SHARED_PATH}/datos_procesados.json', 'r') as f:
         datos = json.load(f)
     
@@ -122,7 +119,7 @@ task_check_spark = BranchPythonOperator(
     dag=dag,
 )
 
-# Spark real (requiere conexión configurada en Airflow)
+# Spark real 
 task_spark = SparkSubmitOperator(
     task_id='ejecutar_spark',
     application='/opt/spark/jobs/modelo_spark.py',
